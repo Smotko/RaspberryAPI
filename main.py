@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = FastAPI(
     title="🍓 API",
-    description="API endpoints for my Raspberry Pi",
+    description="API endpoints for your Raspberry Pi",
     version="v2021.4.25",
     openapi_tags=[
         {
