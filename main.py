@@ -49,7 +49,7 @@ async def speak(speach: Speach):
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
-    stdout, stderr = await proc.communicate()
+    await proc.communicate()
 
 
 @app.post("/api/v1/speach", tags=["speach"], response_model=SpeachResponse)
@@ -60,3 +60,18 @@ async def speach(
     logger.info("Saying `%s` in language %s", speach.text, speach.language)
     background_tasks.add_task(speak, speach=speach)
     return SpeachResponse()
+
+
+class UptimeResponse(BaseModel):
+    result = "00:41:51 up 17 days, 12:27,  3 users,  load average: 1.11, 1.04, 1.01"
+
+
+@app.get("/api/v1/uptime", tags=["stats"], response_model=UptimeResponse)
+async def uptime():
+    proc = await asyncio.create_subprocess_shell(
+        "uptime",
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    stdout, stderr = await proc.communicate()
+    return UptimeResponse(result=stdout.strip())
