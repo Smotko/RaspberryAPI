@@ -10,6 +10,18 @@ def test_main():
     assert response.headers["Location"] == "/docs"
 
 
+def test_docs():
+    response = client.get("/docs")
+    assert response.status_code == 200
+    assert "🍓 API" in response.text
+
+
+def test_openapi():
+    response = client.get("/openapi.json")
+    assert response.status_code == 200
+    assert len(response.json()["paths"]) > 0
+
+
 def test_uptime():
     response = client.get("/api/v1/uptime")
     assert response.status_code == 200
