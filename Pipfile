@@ -5,6 +5,9 @@ verify_ssl = true
 
 [dev-packages]
 black = "==20.8b1"
+pytest = "*"
+requests = "*"
+pytest-watch = "*"
 
 [packages]
 fastapi = "*"
