@@ -1,8 +1,8 @@
 import asyncio
 import logging
 from enum import Enum
-from typing import Optional
 from shlex import quote
+from typing import Optional
 
 from fastapi import BackgroundTasks, FastAPI
 from fastapi.responses import RedirectResponse
@@ -44,6 +44,13 @@ class SpeachResponse(BaseModel):
 
 
 async def speak(speach: Speach):
+    # Sometimes the first invocation doesn't work so I'm making it say nothing first
+    proc = await asyncio.create_subprocess_shell(
+        f'espeak -v{quote(speach.language)} --stdout " " | aplay',
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    await proc.communicate()
     proc = await asyncio.create_subprocess_shell(
         f'espeak -v{quote(speach.language)} --stdout "{quote(speach.text)}" | aplay',
         stdout=asyncio.subprocess.PIPE,
